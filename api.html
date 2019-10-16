@@ -7,19 +7,22 @@
        function fKnopklik()
        {
         var gvRequest = new XMLHttpRequest();
-
-        gvRequest.open('GET',"https://api.thecatapi.com/v1/images/search" , true);
-        gvRequest.setRequestHeader("x-api-key","ce3c7fe4-4788-44c6-883b-5a9f3829b30b")
+        var plaatsinput = document.getElementById("plaats").value
+        console.log(plaatsinput)
+        gvRequest.open('GET',"https://maps.googleapis.com/maps/api/geocode/json?address="+plaatsinput+"&key=AIzaSyAsK2NO4uv43KPfkJxZWhnY2wvrC9DgsFI" , true);
+   
 
         gvRequest.onload =function()
         {   
             
-            var uitkomst = JSON.parse(gvRequest.responseText);
-           console.log(uitkomst[0].url);
-           var kattenfotoURL = uitkomst[0].url
-           var html = '<img src="'+kattenfotoURL+'">';
-            deDIV = document.getElementById("plaatje")
-            deDIV.innerHTML = html
+           var resultaat = JSON.parse(this.responseText);
+           console.log(resultaat)
+           
+           
+           var latitude = resultaat.results[0].geometry.location.lat
+           var longtitude = resultaat.results[0].geometry.location.lng
+
+            console.log("Latitude = " +latitude+ " & Longtitude = " + longtitude);
             
         }
         gvRequest.send();
@@ -37,8 +40,8 @@
 
 <body>
 
-    <div id=plaatje>Klik voor een kattenplaatje!</div>
-    <br>
+    <input type=text id=plaats>
+        <br>
     <button id=bTest onclick="fKnopklik()">Klikken</button>
 
 
